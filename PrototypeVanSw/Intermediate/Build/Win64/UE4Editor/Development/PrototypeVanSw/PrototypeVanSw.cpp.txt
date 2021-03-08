@@ -1,0 +1,2 @@
+C:\Users\danru\Desktop\RepoPrototipoTFM\PrototipoVanishingSword\PrototypeVanSw\Intermediate\Build\Win64\UE4Editor\Development\PrototypeVanSw\Definitions.PrototypeVanSw.h
+C:\Users\danru\Desktop\RepoPrototipoTFM\PrototipoVanishingSword\PrototypeVanSw\Source\PrototypeVanSw\PrototypeVanSw.h
