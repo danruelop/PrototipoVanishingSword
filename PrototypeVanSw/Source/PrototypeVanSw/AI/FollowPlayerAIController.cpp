@@ -28,7 +28,18 @@ void AFollowPlayerAIController::Tick(float DeltaTime)
 
 	if (Active)
 	{
-		MoveToLocation(UGameplayStatics::GetPlayerPawn(this, 0)->GetActorLocation());
+		APawn* P0 = UGameplayStatics::GetPlayerPawn(this, 0);
+		if (P0)
+		{
+			FVector Dest = P0->GetActorLocation();
+			APawn* P1 = UGameplayStatics::GetPlayerPawn(this, 1);
+			APawn* OwnerPawn = GetPawn();
+			if (P1 && (FVector::Dist(OwnerPawn->GetActorLocation(), P0->GetActorLocation()) > FVector::Dist(OwnerPawn->GetActorLocation(), P1->GetActorLocation())))
+			{
+				Dest = P1->GetActorLocation();
+			}
+			MoveToLocation(Dest);
+		}
 	}
 }
 
