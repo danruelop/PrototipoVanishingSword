@@ -37,14 +37,18 @@ void AZombieEnemy::Tick(float DeltaTime)
 		}
 	}
 
-	UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent")[0]);
-	if (ProximityAttackComponent)
+	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
+	if (ProximityAttackComponents.Num() > 0)
 	{
-		Attacking = ((Health > 0) && (ProximityAttackComponent->Attacking));
-		bool Active = (!ProximityAttackComponent->DistanceAbleToAttack()) && (!Beaten) && (!Attacking) && (!Dying);
-		SetAIActive(Active);
-		Speed = (Active ? MaxSpeed : 0);
-		SetCharacterMovementComponentSpeed(Speed);
+		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
+		if (ProximityAttackComponent)
+		{
+			Attacking = ((Health > 0) && (ProximityAttackComponent->Attacking));
+			bool Active = (!ProximityAttackComponent->DistanceAbleToAttack()) && (!Beaten) && (!Attacking) && (!Dying);
+			SetAIActive(Active);
+			Speed = (Active ? MaxSpeed : 0);
+			SetCharacterMovementComponentSpeed(Speed);
+		}
 	}
 
 	SetBeaten(Beaten);
@@ -52,10 +56,14 @@ void AZombieEnemy::Tick(float DeltaTime)
 
 void AZombieEnemy::Hit()
 {
-	UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent")[0]);
-	if (ProximityAttackComponent)
+	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
+	if (ProximityAttackComponents.Num() > 0)
 	{
-		ProximityAttackComponent->HitPlayer();
+		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
+		if (ProximityAttackComponent)
+		{
+			ProximityAttackComponent->HitPlayer();
+		}
 	}
 }
 
@@ -70,10 +78,14 @@ void AZombieEnemy::SetAIActive(bool Active)
 
 void AZombieEnemy::SetCharacterMovementComponentSpeed(float _Speed)
 {
-	UCharacterMovementComponent* CharacterMovementComponent = Cast<UCharacterMovementComponent>(GetComponentsByTag(UCharacterMovementComponent::StaticClass(), "CharacterMovementComponent")[0]);
-	if (CharacterMovementComponent)
+	TArray<UActorComponent*> CharacterMovementComponents = GetComponentsByTag(UCharacterMovementComponent::StaticClass(), "CharacterMovementComponent");
+	if (CharacterMovementComponents.Num() > 0)
 	{
-		CharacterMovementComponent->MaxWalkSpeed = _Speed;
+		UCharacterMovementComponent* CharacterMovementComponent = Cast<UCharacterMovementComponent>(CharacterMovementComponents[0]);
+		if (CharacterMovementComponent)
+		{
+			CharacterMovementComponent->MaxWalkSpeed = _Speed;
+		}
 	}
 }
 
@@ -84,10 +96,14 @@ void AZombieEnemy::SetBeaten(bool _Beaten)
 
 void AZombieEnemy::SetAttacking(bool _Attacking)
 {
-	UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent")[0]);
-	if (ProximityAttackComponent)
+	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
+	if (ProximityAttackComponents.Num() > 0)
 	{
-		ProximityAttackComponent->Attacking = _Attacking;
+		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
+		if (ProximityAttackComponent)
+		{
+			ProximityAttackComponent->Attacking = _Attacking;
+		}
 	}
 }
 /*
