@@ -2,6 +2,7 @@
 
 
 #include "FollowPlayerAIController.h"
+#include "Enemies/ZombieEnemy.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -28,17 +29,10 @@ void AFollowPlayerAIController::Tick(float DeltaTime)
 
 	if (Active)
 	{
-		APawn* P0 = UGameplayStatics::GetPlayerPawn(this, 0);
-		if (P0)
+		AZombieEnemy* Enemy = Cast<AZombieEnemy>(GetPawn());
+		if (Enemy && Enemy->Target)
 		{
-			FVector Dest = P0->GetActorLocation();
-			APawn* P1 = UGameplayStatics::GetPlayerPawn(this, 1);
-			APawn* OwnerPawn = GetPawn();
-			if (P1 && (FVector::Dist(OwnerPawn->GetActorLocation(), P0->GetActorLocation()) > FVector::Dist(OwnerPawn->GetActorLocation(), P1->GetActorLocation())))
-			{
-				Dest = P1->GetActorLocation();
-			}
-			MoveToLocation(Dest);
+			MoveToLocation(Enemy->Target->GetActorLocation());
 		}
 	}
 }

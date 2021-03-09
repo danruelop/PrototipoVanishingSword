@@ -5,6 +5,7 @@
 #include "Components/ProximityAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../FollowPlayerAIController.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Called when the game starts or when spawned
@@ -22,6 +23,18 @@ void AZombieEnemy::Tick(float DeltaTime)
 	if (Health <= 0)
 	{
 		SetDying(true);
+	}
+
+
+	APawn* P0 = UGameplayStatics::GetPlayerPawn(this, 0);
+	if (P0)
+	{
+		Target = P0;
+		APawn* P1 = UGameplayStatics::GetPlayerPawn(this, 1);
+		if (P1 && (FVector::Dist(GetActorLocation(), P0->GetActorLocation()) > FVector::Dist(GetActorLocation(), P1->GetActorLocation())))
+		{
+			Target = P1;
+		}
 	}
 
 	UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent")[0]);
@@ -42,7 +55,7 @@ void AZombieEnemy::Hit()
 	UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent")[0]);
 	if (ProximityAttackComponent)
 	{
-		ProximityAttackComponent->Hit();
+		ProximityAttackComponent->HitPlayer();
 	}
 }
 
@@ -77,3 +90,16 @@ void AZombieEnemy::SetAttacking(bool _Attacking)
 		ProximityAttackComponent->Attacking = _Attacking;
 	}
 }
+/*
+void HitPlayer()
+{
+	if (DistanceInRange())
+	{
+		AMainCharacter* MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+		if (MainCharacter)
+		{
+			MainCharacter->Damage(Damage);
+		}
+	}
+}
+*/

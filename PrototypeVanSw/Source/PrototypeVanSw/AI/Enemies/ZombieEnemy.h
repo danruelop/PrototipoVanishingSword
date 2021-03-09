@@ -23,6 +23,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		bool Attacking;
+	
+	UPROPERTY(BlueprintReadOnly)
+		AActor* Target;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,6 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Hit();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void HitPlayer();
+	
 protected:
 	void SetAIActive(bool Active);
 

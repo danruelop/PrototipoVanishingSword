@@ -3,6 +3,7 @@
 
 #include "ProximityAttackComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "PrototypeVanSw/AI/Enemies/ZombieEnemy.h"
 //#include "../../Characters/MainCharacter.h"
 
 
@@ -43,12 +44,14 @@ void UProximityAttackComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 bool UProximityAttackComponent::DistanceAbleToAttack()
 {
-	return (GetOwner()->GetDistanceTo(UGameplayStatics::GetPlayerPawn(this, 0)) < AttackDistance);
+	AZombieEnemy* Enemy = Cast<AZombieEnemy>(GetOwner());
+	return (Enemy && (FVector::Dist(GetOwner()->GetActorLocation(), Enemy->Target->GetActorLocation()) < AttackDistance));
 }
 
 bool UProximityAttackComponent::DistanceInRange()
 {
-	return (GetOwner()->GetDistanceTo(UGameplayStatics::GetPlayerPawn(this, 0)) < AttackRange);
+	AZombieEnemy* Enemy = Cast<AZombieEnemy>(GetOwner());
+	return (Enemy && (FVector::Dist(GetOwner()->GetActorLocation(), Enemy->Target->GetActorLocation()) < AttackRange));
 }
 
 bool UProximityAttackComponent::TimeAbleToAttack()
@@ -56,17 +59,12 @@ bool UProximityAttackComponent::TimeAbleToAttack()
 	return (TimeSinceLastAttack > AttackRate);
 }
 
-void UProximityAttackComponent::Hit()
+void UProximityAttackComponent::HitPlayer()
 {
-	if (DistanceInRange())
+	AZombieEnemy* Enemy = Cast<AZombieEnemy>(GetOwner());
+	if (Enemy)
 	{
-		/*
-		AMainCharacter* MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
-		if (MainCharacter)
-		{
-			MainCharacter->Damage(Damage);
-		}
-		*/
+		Enemy->HitPlayer();
 	}
 }
 
