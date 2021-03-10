@@ -59,15 +59,6 @@ bool UProximityAttackComponent::TimeAbleToAttack()
 	return (TimeSinceLastAttack > AttackRate);
 }
 
-void UProximityAttackComponent::HitPlayer()
-{
-	AZombieEnemy* Enemy = Cast<AZombieEnemy>(GetOwner());
-	if (Enemy)
-	{
-		Enemy->HitPlayer();
-	}
-}
-
 void UProximityAttackComponent::ResetTimeSinceLastAttack()
 {
 	TimeSinceLastAttack = 0;

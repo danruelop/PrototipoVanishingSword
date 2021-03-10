@@ -40,10 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetAttacking(bool _Attacking);
 
-	UFUNCTION(BlueprintCallable)
-		void Hit();
-
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void HitPlayer();
 	
 protected:

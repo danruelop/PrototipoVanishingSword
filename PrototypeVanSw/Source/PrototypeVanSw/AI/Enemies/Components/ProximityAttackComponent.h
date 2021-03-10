@@ -54,7 +54,4 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool TimeAbleToAttack();
 
-	UFUNCTION(BlueprintCallable)
-		void HitPlayer();
-
 };

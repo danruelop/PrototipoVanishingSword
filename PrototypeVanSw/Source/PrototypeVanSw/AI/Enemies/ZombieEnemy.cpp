@@ -54,19 +54,6 @@ void AZombieEnemy::Tick(float DeltaTime)
 	SetBeaten(Beaten);
 }
 
-void AZombieEnemy::Hit()
-{
-	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
-	if (ProximityAttackComponents.Num() > 0)
-	{
-		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
-		if (ProximityAttackComponent)
-		{
-			ProximityAttackComponent->HitPlayer();
-		}
-	}
-}
-
 void AZombieEnemy::SetAIActive(bool Active)
 {
 	AFollowPlayerAIController* FollowPlayerAIController = Cast<AFollowPlayerAIController>(GetController());
