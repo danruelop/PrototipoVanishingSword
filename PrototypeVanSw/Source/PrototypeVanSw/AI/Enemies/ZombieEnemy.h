@@ -27,6 +27,18 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		AActor* Target;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackRate;
+
+protected:
+	float TimeSinceLastAttack;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,10 +54,21 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void HitPlayer();
-	
+
+	UFUNCTION(BlueprintCallable)
+		bool DistanceAbleToAttack();
+
+	UFUNCTION(BlueprintCallable)
+		bool DistanceInRange();
+
+	UFUNCTION(BlueprintCallable)
+		bool TimeAbleToAttack();
+
 protected:
 	void SetAIActive(bool Active);
 
 	void SetCharacterMovementComponentSpeed(float Speed);
+
+	void ResetTimeSinceLastAttack();
 
 };
