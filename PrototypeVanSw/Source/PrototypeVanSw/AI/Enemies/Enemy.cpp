@@ -66,11 +66,7 @@ void AEnemy::SetFadeOutDestroy(float Offset, float Speed)
 
 void AEnemy::DeactivateCharacterMovementComponent()
 {
-	TArray<UActorComponent*> CharacterMovementComponents = GetComponentsByTag(UCharacterMovementComponent::StaticClass(), "CharacterMovementComponent");
-	if (CharacterMovementComponents.Num() > 0)
-	{
-		CharacterMovementComponents[0]->Deactivate();
-	}
+	GetCharacterMovement()->Deactivate();
 }
 
 void AEnemy::SetBeaten(bool _Beaten)

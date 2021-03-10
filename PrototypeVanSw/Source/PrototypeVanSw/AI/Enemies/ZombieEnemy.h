@@ -23,9 +23,36 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		bool Attacking;
+
+	UPROPERTY(BlueprintReadOnly)
+		bool AttackingCharged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int ChargedAttackProbability;
 	
 	UPROPERTY(BlueprintReadOnly)
 		AActor* Target;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float DistanceToStartAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackChargedRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float StunTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float TimeStunned;
+
+protected:
+	float TimeSinceLastAttack;
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,14 +68,28 @@ public:
 		void SetAttacking(bool _Attacking);
 
 	UFUNCTION(BlueprintCallable)
-		void Hit();
+		void SetAttackingCharged(bool _AttackingCharged);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void HitPlayer();
-	
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void HitArea();
+
+	UFUNCTION(BlueprintCallable)
+		bool DistanceAbleToAttack();
+
+	UFUNCTION(BlueprintCallable)
+		bool TimeAbleToAttack();
+
+	UFUNCTION(BlueprintCallable)
+		void Stun();
+
 protected:
 	void SetAIActive(bool Active);
 
 	void SetCharacterMovementComponentSpeed(float Speed);
+
+	void ResetTimeSinceLastAttack();
 
 };

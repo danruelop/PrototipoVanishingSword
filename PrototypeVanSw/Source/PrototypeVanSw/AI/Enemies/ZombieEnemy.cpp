@@ -2,10 +2,10 @@
 
 
 #include "ZombieEnemy.h"
-#include "Components/ProximityAttackComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../FollowPlayerAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Math/UnrealMathUtility.h"
 
 
 // Called when the game starts or when spawned
@@ -13,6 +13,8 @@ void AZombieEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TimeSinceLastAttack = AttackRate;
+	TimeStunned = 0;
 }
 
 // Called every frame
@@ -25,46 +27,48 @@ void AZombieEnemy::Tick(float DeltaTime)
 		SetDying(true);
 	}
 
-
-	APawn* P0 = UGameplayStatics::GetPlayerPawn(this, 0);
-	if (P0)
+	if (TimeStunned >= 0)
 	{
-		Target = P0;
-		APawn* P1 = UGameplayStatics::GetPlayerPawn(this, 1);
-		if (P1 && (FVector::Dist(GetActorLocation(), P0->GetActorLocation()) > FVector::Dist(GetActorLocation(), P1->GetActorLocation())))
-		{
-			Target = P1;
-		}
+		SetCharacterMovementComponentSpeed(0);
+		TimeStunned -= DeltaTime;
 	}
-
-	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
-	if (ProximityAttackComponents.Num() > 0)
+	else
 	{
-		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
-		if (ProximityAttackComponent)
+		TimeSinceLastAttack += DeltaTime;
+		if (TimeAbleToAttack() && DistanceAbleToAttack())
 		{
-			Attacking = ((Health > 0) && (ProximityAttackComponent->Attacking));
-			bool Active = (!ProximityAttackComponent->DistanceAbleToAttack()) && (!Beaten) && (!Attacking) && (!Dying);
-			SetAIActive(Active);
-			Speed = (Active ? MaxSpeed : 0);
-			SetCharacterMovementComponentSpeed(Speed);
+			ResetTimeSinceLastAttack();
+			if ((Health >= (InitialHealth / 2)) && (FMath::RandRange(0, 100) <= ChargedAttackProbability))
+			{
+				AttackingCharged = true;
+			}
+			else
+			{
+				Attacking = true;
+			}
 		}
+
+
+		APawn* P0 = UGameplayStatics::GetPlayerPawn(this, 0);
+		if (P0)
+		{
+			Target = P0;
+			APawn* P1 = UGameplayStatics::GetPlayerPawn(this, 1);
+			if (P1 && (FVector::Dist(GetActorLocation(), P0->GetActorLocation()) > FVector::Dist(GetActorLocation(), P1->GetActorLocation())))
+			{
+				Target = P1;
+			}
+		}
+
+		Attacking = ((Health > 0) && (Attacking));
+		AttackingCharged = ((Health > 0) && (AttackingCharged));
+		bool Active = (!DistanceAbleToAttack() && (!Beaten) && (!Attacking) && (!AttackingCharged) && (!Dying));
+		SetAIActive(Active);
+		Speed = (Active ? MaxSpeed : 0);
+		SetCharacterMovementComponentSpeed(Speed);
 	}
 
 	SetBeaten(Beaten);
-}
-
-void AZombieEnemy::Hit()
-{
-	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
-	if (ProximityAttackComponents.Num() > 0)
-	{
-		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
-		if (ProximityAttackComponent)
-		{
-			ProximityAttackComponent->HitPlayer();
-		}
-	}
 }
 
 void AZombieEnemy::SetAIActive(bool Active)
@@ -78,15 +82,7 @@ void AZombieEnemy::SetAIActive(bool Active)
 
 void AZombieEnemy::SetCharacterMovementComponentSpeed(float _Speed)
 {
-	TArray<UActorComponent*> CharacterMovementComponents = GetComponentsByTag(UCharacterMovementComponent::StaticClass(), "CharacterMovementComponent");
-	if (CharacterMovementComponents.Num() > 0)
-	{
-		UCharacterMovementComponent* CharacterMovementComponent = Cast<UCharacterMovementComponent>(CharacterMovementComponents[0]);
-		if (CharacterMovementComponent)
-		{
-			CharacterMovementComponent->MaxWalkSpeed = _Speed;
-		}
-	}
+	GetCharacterMovement()->MaxWalkSpeed = _Speed;
 }
 
 void AZombieEnemy::SetBeaten(bool _Beaten)
@@ -96,26 +92,34 @@ void AZombieEnemy::SetBeaten(bool _Beaten)
 
 void AZombieEnemy::SetAttacking(bool _Attacking)
 {
-	TArray<UActorComponent*> ProximityAttackComponents = GetComponentsByTag(UProximityAttackComponent::StaticClass(), "ProximityAttackComponent");
-	if (ProximityAttackComponents.Num() > 0)
-	{
-		UProximityAttackComponent* ProximityAttackComponent = Cast<UProximityAttackComponent>(ProximityAttackComponents[0]);
-		if (ProximityAttackComponent)
-		{
-			ProximityAttackComponent->Attacking = _Attacking;
-		}
-	}
+	Attacking = _Attacking;
 }
-/*
-void HitPlayer()
+
+void AZombieEnemy::SetAttackingCharged(bool _AttackingCharged)
 {
-	if (DistanceInRange())
-	{
-		AMainCharacter* MainCharacter = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
-		if (MainCharacter)
-		{
-			MainCharacter->Damage(Damage);
-		}
-	}
+	AttackingCharged = _AttackingCharged;
 }
-*/
+
+bool AZombieEnemy::DistanceAbleToAttack()
+{
+	if (Target)
+	{
+		return (FVector::Dist(GetActorLocation(), Target->GetActorLocation()) < DistanceToStartAttack);
+	}
+	return false;
+}
+
+bool AZombieEnemy::TimeAbleToAttack()
+{
+	return (TimeSinceLastAttack > AttackRate);
+}
+
+void AZombieEnemy::ResetTimeSinceLastAttack()
+{
+	TimeSinceLastAttack = 0;
+}
+
+void AZombieEnemy::Stun()
+{
+	TimeStunned = StunTime;
+}
