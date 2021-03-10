@@ -23,18 +23,33 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		bool Attacking;
+
+	UPROPERTY(BlueprintReadOnly)
+		bool AttackingCharged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int ChargedAttackProbability;
 	
 	UPROPERTY(BlueprintReadOnly)
 		AActor* Target;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float AttackDistance;
+		float DistanceToStartAttack;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float AttackRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackChargedRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float AttackRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float StunTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float TimeStunned;
 
 protected:
 	float TimeSinceLastAttack;
@@ -52,17 +67,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetAttacking(bool _Attacking);
 
+	UFUNCTION(BlueprintCallable)
+		void SetAttackingCharged(bool _AttackingCharged);
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void HitPlayer();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void HitArea();
 
 	UFUNCTION(BlueprintCallable)
 		bool DistanceAbleToAttack();
 
 	UFUNCTION(BlueprintCallable)
-		bool DistanceInRange();
+		bool TimeAbleToAttack();
 
 	UFUNCTION(BlueprintCallable)
-		bool TimeAbleToAttack();
+		void Stun();
 
 protected:
 	void SetAIActive(bool Active);
