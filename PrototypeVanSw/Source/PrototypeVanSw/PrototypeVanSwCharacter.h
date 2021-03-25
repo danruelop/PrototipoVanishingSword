@@ -29,6 +29,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	/** Variable to control if the player is dashing. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool  bIsInNormalDash;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
