@@ -1,24 +1,21 @@
-# PrototipoVanishingSword
-
-#VIVA EL BETIS
-#REAL BETIS BALOMPIÉ
+# Steebound Prototype (Vanishing Sword)
  
 ** ISHTAR STUDIOS **
 
-Controles:
+Controls:
 
-Teclado:
+Keyboard:
 
-- Movimiento: WASD
-- Reclamar la espada: T (dejar pulsado para más daño)
-- (Con espada) Golpe de espada: F (como de hasta 3 golpes pulsando seguido)
-- (Sin espada) Aturdir: F
-- Acelerón (Sin espada): Espacio
+- Movement: WASD
+- Take sword: T (hold to deal + damage)
+- (With sword) Slash combo: F (x3)
+- (Without sword) Stun: F
+- (Without sword) Dash: Space
 
-Mando:
+Gamepad:
 
-- Movimiento: Stick izquierdo
-- Reclamar la espada: Shoulder izquierdo
-- (Con espada) Golpe de espada: Face button izquierdo
-- (Sin espada) Aturdir: Face button izquierdo
-- Acelerón (Sin espada): Face button abajo
+- Movement: Left stick
+- Take sword: L1
+- (With sword) Slash combo: Face button left (x3)
+- (Without sword) Stun: Face button left
+- (Without sword) Dash: Face button down
