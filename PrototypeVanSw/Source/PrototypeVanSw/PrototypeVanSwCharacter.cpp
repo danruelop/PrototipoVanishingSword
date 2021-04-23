@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/HUD.h"
+#include "Engine/Engine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // APrototypeVanSwCharacter
@@ -123,7 +125,14 @@ void APrototypeVanSwCharacter::MoveForward(float Value)
 
 			// get forward vector
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-			AddMovementInput(Direction, Value);
+			if (bIsCharginAttack)
+			{
+				OnMovingWhileCharginAttack();
+			}
+			else
+			{
+				AddMovementInput(Direction, Value);
+			}
 		}
 	}
 }
@@ -140,8 +149,20 @@ void APrototypeVanSwCharacter::MoveRight(float Value)
 
 			// get right vector 
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-			// add movement in that direction
-			AddMovementInput(Direction, Value);
+			if (bIsCharginAttack)
+			{
+				OnMovingWhileCharginAttack();
+			}
+			else
+			{
+				// add movement in that direction
+				AddMovementInput(Direction, Value);
+			}
 		}
 	}
+}
+
+void APrototypeVanSwCharacter::OnMovingWhileCharginAttack_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.8f, FColor::Blue, *FString("Called on C++"));
 }

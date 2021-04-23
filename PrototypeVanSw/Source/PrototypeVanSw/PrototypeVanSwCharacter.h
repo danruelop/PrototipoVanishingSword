@@ -33,6 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool  bIsInNormalDash;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool  bIsCharginAttack;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
@@ -72,5 +75,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	UFUNCTION(BlueprintNativeEvent)
+		void OnMovingWhileCharginAttack();
+
+	void OnMovingWhileCharginAttack_Implementation();
 };
 
