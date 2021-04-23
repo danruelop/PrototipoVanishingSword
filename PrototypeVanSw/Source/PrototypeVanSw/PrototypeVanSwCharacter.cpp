@@ -164,6 +164,11 @@ void APrototypeVanSwCharacter::MoveRight(float Value)
 
 void APrototypeVanSwCharacter::OnMovingWhileCharginAttack_Implementation(FRotator YawRotation)
 {
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	const FVector PointAhead = this->GetActorLocation() + Direction;
+	//FRotator PlayerRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), PointAhead);
+	//SetActorLocationAndRotation(this->GetActorLocation(), PlayerRot, false, 0, ETeleportType::None);
+
 	//FQuat QuatRotation = FQuat(YawRotation);
 	//AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
 	GEngine->AddOnScreenDebugMessage(-1, 0.8f, FColor::Blue, *FString("Called on C++"));
