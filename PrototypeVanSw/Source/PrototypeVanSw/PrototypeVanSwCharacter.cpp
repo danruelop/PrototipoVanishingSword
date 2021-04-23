@@ -125,9 +125,9 @@ void APrototypeVanSwCharacter::MoveForward(float Value)
 
 			// get forward vector
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-			if (bIsCharginAttack)
+			if (mBIsCharginAttack)
 			{
-				OnMovingWhileCharginAttack();
+				OnMovingWhileCharginAttack(YawRotation);
 			}
 			else
 			{
@@ -149,9 +149,9 @@ void APrototypeVanSwCharacter::MoveRight(float Value)
 
 			// get right vector 
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-			if (bIsCharginAttack)
+			if (mBIsCharginAttack)
 			{
-				OnMovingWhileCharginAttack();
+				OnMovingWhileCharginAttack(YawRotation);
 			}
 			else
 			{
@@ -162,7 +162,9 @@ void APrototypeVanSwCharacter::MoveRight(float Value)
 	}
 }
 
-void APrototypeVanSwCharacter::OnMovingWhileCharginAttack_Implementation()
+void APrototypeVanSwCharacter::OnMovingWhileCharginAttack_Implementation(FRotator YawRotation)
 {
+	//FQuat QuatRotation = FQuat(YawRotation);
+	//AddActorLocalRotation(QuatRotation, false, 0, ETeleportType::None);
 	GEngine->AddOnScreenDebugMessage(-1, 0.8f, FColor::Blue, *FString("Called on C++"));
 }

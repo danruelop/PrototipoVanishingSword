@@ -77,9 +77,12 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool mBIsCharginAttack = false;
+public:
 	UFUNCTION(BlueprintNativeEvent)
-		void OnMovingWhileCharginAttack();
+		void OnMovingWhileCharginAttack(FRotator YawRotation);
 
-	void OnMovingWhileCharginAttack_Implementation();
+	void OnMovingWhileCharginAttack_Implementation(FRotator YawRotation);
 };
 
